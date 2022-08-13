@@ -1,0 +1,1 @@
+Calculations directly taken from the excellent package Python_Option_Pricing (https://github.com/dedwards25/Python_Option_Pricing/blob/master/GBS.ipynb).
