@@ -1,6 +1,6 @@
 import { main } from './main';
 
-export async function hello(event) {
+export async function hello(event:any) {
     console.log('starting job', new Date());
     
     try {
