@@ -1,0 +1,20 @@
+service: serverless
+app: serverless
+org: gabrielfior
+useDotenv: true
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  profile: outlook
+  region: us-east-1
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - schedule: rate(5 minutes)
+
+plugins:
+  - serverless-esbuild

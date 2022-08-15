@@ -17,6 +17,7 @@ const symbolIdentifierMap: Map<string, string> = new Map([
 ]);
 
 export async function getPrice(symbol: string) {
+    console.log('entered get Price');
     const pythPublicKey = getPythProgramKeyForCluster(SOLANA_CLUSTER_NAME);
     const connection = new Connection(getPythClusterApiUrl(SOLANA_CLUSTER_NAME))
     const pythClient = new PythHttpClient(connection, pythPublicKey);
@@ -32,5 +33,6 @@ export async function getPrice(symbol: string) {
     // Sample output:
     // Crypto.SRM/USD: $8.68725 ±$0.0131 Status: Trading
     //console.log(`${symbol}: $${price.price} \xB1$${price.confidence} Status: ${PriceStatus[price.status]}`)
+    console.log('finished getPrice');
     return [price.price, price.confidence, price.status];
 }

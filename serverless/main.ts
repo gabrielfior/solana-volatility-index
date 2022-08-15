@@ -15,7 +15,7 @@ import {
 } from "@zetamarkets/sdk";
 import AWS from 'aws-sdk';
 
-type Option = {
+export type Option = {
   serumMarketAddress: string;
   interestRate: Number;
   exchange: string | null;
@@ -30,10 +30,11 @@ type Option = {
   price: Number;
   confidence: Number;
   priceStatus: Number;
+  current_datetime: Date;
 }
 
 
-async function uploadToS3(items: Array<Option>) {
+export async function uploadToS3(items: Array<Option>) {
   console.log('enter uploadToS3');
 
   //var AWS = require('aws-sdk');
@@ -62,7 +63,8 @@ function writeItemsToFile(items: Array<Option>) {
   fs.writeFileSync('output.json', JSON.stringify(items));
 }
 
-async function displayState() {
+export async function displayState() {
+  console.log('entered display state');
   let subExchanges = Exchange.subExchanges;
 
   let items: Array<Option> = [];
@@ -110,7 +112,7 @@ async function displayState() {
           subExchange.greeks.productGreeks[greeksIndex].vega
         ).toNumber();
 
-        console.log('quote vault', market.quoteVault.toString());
+        // console.log('quote vault', market.quoteVault.toString());
 
         items.push({
           serumMarketAddress: market.serumMarket.address.toString(),
@@ -126,7 +128,8 @@ async function displayState() {
           vega: vega,
           price: price!,
           confidence: confidence!,
-          priceStatus: priceStatus!
+          priceStatus: priceStatus!,
+          current_datetime: new Date()
         });
       }
     }
@@ -152,7 +155,7 @@ const initializeExchange = async (connection: Connection) => {
   );
 };
 
-const main = async () => {
+export async function main() {
   let networkUrlDevNet = `https://aged-compatible-wish.solana-devnet.quiknode.pro/${process.env.QUICKNODE_KEY}/`;
   const connection = new Connection(networkUrlDevNet, utils.defaultCommitment());
 
@@ -162,8 +165,9 @@ const main = async () => {
 };
 
 
-main().then(() => {
-  console.log('finished');
-  process.exit(0);
-});
-//getPrice('BTC').then((e) => console.log(e));
+export function execute() {
+  main().then(() => {
+    console.log('finished');
+    //process.exit(0);
+  }).catch((e) => console.error(e));
+};
