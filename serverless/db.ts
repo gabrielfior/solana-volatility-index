@@ -34,7 +34,7 @@ export async function writeItemToDb(db: any, item: Option) {
       Object.values(item)
     )
     .then(() => {
-      console.log('finished writing');
+      console.log('finished writing' + Object.values(item));
     })
     .catch((error) => {
       console.log("ERROR:", error);
