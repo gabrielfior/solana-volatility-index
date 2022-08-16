@@ -162,6 +162,6 @@ export async function main() {
 export function execute() {
   main().then(() => {
     console.log('finished');
-    //process.exit(0);
+    process.exit(0);
   }).catch((e) => console.error(e));
 };

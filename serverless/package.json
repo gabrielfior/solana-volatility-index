@@ -5,6 +5,7 @@
         "serverless-esbuild": "^1.32.5"
     },
     "dependencies": {
+        "node-cron": "^3.0.2",
         "pg-promise": "^10.11.1"
     }
 }
