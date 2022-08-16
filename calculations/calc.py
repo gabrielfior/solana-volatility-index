@@ -1,9 +1,7 @@
 import loguru
 import numpy as np
 import pandas as pd
-
 from utils import *
-
 
 class VolatilityHandler:
 
@@ -16,6 +14,8 @@ class VolatilityHandler:
                 try:
                     implied_vol_for_exchange = get_implied_volatility_from_item(item)
                     values.append(implied_vol_for_exchange)
+                except KindException as e:
+                    continue
                 except Exception as e:
                     loguru.logger.exception(e)
                     continue

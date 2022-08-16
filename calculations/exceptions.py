@@ -1,0 +1,2 @@
+class KindException(Exception):
+    pass
