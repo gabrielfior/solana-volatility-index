@@ -5,8 +5,8 @@ const GlobalStyle = ({ children }) => {
   return (
     <>
       <Head>
-        <meta content="width=device-width, initial-scale=1" 
-         name="viewport" />
+        <meta content="width=device-width, initial-scale=1"
+          name="viewport" />
       </Head>
       <CSSReset />
       {children}
@@ -18,9 +18,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <ChakraProvider>
       <GlobalStyle />
-    <Component {...pageProps} />
+      <Component {...pageProps} />
     </ChakraProvider>
-  ) 
+  )
 }
 
 export default MyApp
