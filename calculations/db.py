@@ -30,10 +30,10 @@ class DB:
             for exchange,iv in v.items():
 
                 record = dict(current_datetime=datetime_idx, exchange = exchange, implied_volatility=iv, 
-                delta=999, gamma=999, theta=999, vega=999, rho=999)
+                delta=None, gamma=None, theta=None, vega=None, rho=None)
                 records.append(record)
     
         # We overwrite the data every time on the destination table. A better approach would be to append only new data. To do in the future.
-        # ToDo - Retrieve delta, gamma, etc from iv calc
+        # Might be interesting to retrieve delta, gamma, etc from iv calc
         write_df = pd.DataFrame.from_records(records)
         write_df.to_sql(self.IMPLIED_VOL_TABLENAME, self.engine, if_exists='replace', index=True)
