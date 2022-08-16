@@ -12,7 +12,13 @@ BigInt.prototype.toJSON = function () {
 // This gets called on every request
 export async function getServerSideProps() {
 
-  const feed = await prisma.implied_volatility.findMany();
+  const feed = await prisma.implied_volatility.findMany({
+    where: {
+      implied_volatility: {
+        not: null,
+      },
+    }
+  });
 
   return {
     props: { impliedVolItems: JSON.parse(JSON.stringify(feed)) },

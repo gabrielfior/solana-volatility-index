@@ -12,6 +12,9 @@
     "@chakra-ui/react": "^2.2.6",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-brands-svg-icons": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@prisma/client": "^4.2.1",
     "@visx/axis": "^2.12.2",
     "@visx/event": "^2.6.0",
@@ -27,6 +30,7 @@
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.4.0",
     "victory": "^36.6.0"
   },
   "devDependencies": {

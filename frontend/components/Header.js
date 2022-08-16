@@ -1,26 +1,24 @@
-import { Box, Flex,  Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, Button, Center } from "@chakra-ui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Header = () => {
     return (
-        <Box
-            pos="fixed"
-            as="header"
-            top="0"
-            bg='#242730'
-            left="0"
-            right="0"
-            borderBottomWidth="1px"
-            width="full"
-            height="4rem"
-        >
-            <Box width="full" mx="auto" px={6} pr={[1, 6]} height="100%" >
-                <Flex size="100%" p={[0, 3]} pl={[0, 4]} align="center" justify="space-between">
-                    <Box as="a" d="block" href="/" aria-label="VisX Area Chart">
-                        <Heading color="gray.100" as="h4" size="md">Volatility Index</Heading>
-                    </Box>
-                </Flex>
-            </Box>
-        </Box>
+        <>
+            <Center>
+                <Box style={{ margin: "10px"}} h='calc(5vh)'>
+                    <Heading mb={4}>
+                        Solindex
+                        <Button style={{ marginLeft: "20px" }} colorScheme='blue'><a href="https://www.twitter.com/wiskDev" target={"_blank"} >
+                            Twitter
+                        </a>
+                        </Button>
+                    </Heading>
+                    <Text fontSize='xl'>
+                        Solana Volatility Index
+                    </Text>
+                </Box>
+            </Center>
+        </>
     );
 }
 

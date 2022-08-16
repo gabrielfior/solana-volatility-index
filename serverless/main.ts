@@ -59,7 +59,7 @@ export async function uploadToDb(items: Array<Option>) {
 }
 
 export async function displayState() {
-  console.log('entered display state');
+
   let subExchanges = Exchange.subExchanges;
 
   let items: Array<Option> = [];
