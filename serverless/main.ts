@@ -55,6 +55,7 @@ export async function uploadToDb(items: Array<Option>) {
   } catch (err) {
     console.log(err)
   }
+  db.$pool.end()
 }
 
 export async function displayState() {
