@@ -1,6 +1,10 @@
 {
     "devDependencies": {
         "esbuild": "^0.14.25",
+        "serverless-bundle": "^5.4.0",
         "serverless-esbuild": "^1.32.5"
+    },
+    "dependencies": {
+        "pg-promise": "^10.11.1"
     }
 }

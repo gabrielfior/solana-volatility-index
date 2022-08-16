@@ -14,6 +14,7 @@ import {
   Decimal,
 } from "@zetamarkets/sdk";
 import AWS from 'aws-sdk';
+import { buildDb, writeItemToDb } from './db';
 
 export type Option = {
   serumMarketAddress: string;
@@ -34,7 +35,7 @@ export type Option = {
 }
 
 
-export async function uploadToS3(items: Array<Option>) {
+export async function uploadToDb(items: Array<Option>) {
   console.log('enter uploadToS3');
 
   //var AWS = require('aws-sdk');
@@ -44,23 +45,16 @@ export async function uploadToS3(items: Array<Option>) {
   var buf = Buffer.from(JSON.stringify(items));
   let currentEpoch = Math.floor(new Date().getTime() / 1000);
 
+  let db = buildDb();
+
   try {
-    const stored = await s3.putObject({
-      Bucket: `${process.env.S3_BUCKET_NAME}`,
-      Key: `zeta-markets-options-${currentEpoch}.json`,
-      ContentType: 'application/json',
-      Body: buf,
-      ACL: 'public-read',
-    }).promise();
-    console.log(stored);
+    items.forEach(async item => {
+      await writeItemToDb(db, item);
+    });
+    console.log('done');
   } catch (err) {
     console.log(err)
   }
-}
-
-function writeItemsToFile(items: Array<Option>) {
-  console.log('begin write items');
-  fs.writeFileSync('output.json', JSON.stringify(items));
 }
 
 export async function displayState() {
@@ -161,7 +155,7 @@ export async function main() {
 
   await initializeExchange(connection);
   let items = await displayState();
-  await uploadToS3(items);
+  await uploadToDb(items);
 };
 
 

@@ -8,13 +8,13 @@ provider:
   name: aws
   runtime: nodejs12.x
   profile: outlook
-  region: us-east-1
+  #region: eu-central-1
 
 functions:
   hello:
     handler: handler.hello
-    events:
-      - schedule: rate(5 minutes)
+    #events:
+    #  - schedule: rate(1 minute)
 
 plugins:
   - serverless-esbuild
