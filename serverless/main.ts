@@ -129,6 +129,7 @@ export async function displayState() {
     }
   }
   console.log(`retrieved ${items.length} items'`);
+  Exchange.close()
   return items;
 }
 
