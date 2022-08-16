@@ -5,7 +5,7 @@ import math
 import loguru
 from scipy.stats import norm
 
-from calculations.exceptions import KindException
+from exceptions import KindException
 
 
 def get_implied_volatility_from_item(item):

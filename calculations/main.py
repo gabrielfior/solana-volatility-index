@@ -1,5 +1,3 @@
-
-
 from calc import VolatilityHandler
 from db import DB
 

@@ -1,4 +1,3 @@
-from turtle import dot
 import sqlalchemy
 import os
 import pandas as pd
@@ -37,3 +36,6 @@ class DB:
         # Might be interesting to retrieve delta, gamma, etc from iv calc
         write_df = pd.DataFrame.from_records(records)
         write_df.to_sql(self.IMPLIED_VOL_TABLENAME, self.engine, if_exists='replace', index=True)
+
+        with self.engine.connect() as con:
+            con.execute(f'ALTER TABLE {self.IMPLIED_VOL_TABLENAME} ADD PRIMARY KEY ("index");')
