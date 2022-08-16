@@ -1,12 +1,12 @@
 # From https://github.com/dedwards25/Python_Option_Pricing/blob/master/GBS.ipynb
 import datetime
 import math
+
 from loguru import logger
-import numpy as np
 from scipy.stats import norm
-from scipy.stats import mvn
 
 _debug = logger.info
+
 
 def get_implied_volatility_from_item(item):
     #    option_type = "p" or "c"
@@ -18,48 +18,56 @@ def get_implied_volatility_from_item(item):
     #    q           = dividend payment
     #    b           = cost of carry
     # cp = Call or Put price
-    #def euro_implied_vol(option_type, fs, x, t, r, q, cp):
-    required_keys = {'exchange','expiryDate','price', 'strike', 'markPrice', 'kind'}
+    # def euro_implied_vol(option_type, fs, x, t, r, q, cp):
+    required_keys = {'exchange', 'expiry_date', 'price', 'strike', 'mark_price', 'kind'}
     if not required_keys < item.keys():
         diff = required_keys.difference(item.keys())
         raise Exception(f'Keys missing from item, see {diff}')
-    elif item['kind'] not in ['call','put']:
+    elif item['kind'] not in ['call', 'put']:
         raise Exception(f"not an option {item['kind']}")
     risk_free_rate = get_interest_free_rate(item['exchange'])
-    time_to_expiry = convert_expiration_to_year(item['expiryDate'])
+    time_to_expiry = convert_expiration_to_year(item['expiry_date'])
     call_or_put = 'c' if item['kind'] == 'call' else 'p'
-    
-    implied_vol = euro_implied_vol(call_or_put,item['price'], item['strike'], time_to_expiry, risk_free_rate, 0., float(item['markPrice']))
+
+    implied_vol = euro_implied_vol(call_or_put, item['price'], item['strike'], time_to_expiry, risk_free_rate, 0.,
+                                   float(item['mark_price']))
     return implied_vol
 
+
 def convert_expiration_to_year(expiry_date):
-    expiry_date = datetime.datetime.strptime(expiry_date,'%Y-%m-%dT%H:%M:%S.%fZ')
-    time_diff_sec = (expiry_date - datetime.datetime.now()).total_seconds()
-    return time_diff_sec/(3600*24*365)
+    # expiry_date = datetime.datetime.strptime(expiry_date,'%Y-%m-%dT%H:%M:%S.%fZ')
+    time_diff_sec = (expiry_date.replace(tzinfo=datetime.timezone.utc) - datetime.datetime.now().replace(
+        tzinfo=datetime.timezone.utc)).total_seconds()
+    return time_diff_sec / (3600 * 24 * 365)
+
 
 def get_interest_free_rate(symbol):
     """ Values from solend """
-    allowed_symbols =  ['ETH','BTC','SOL']
+    allowed_symbols = ['ETH', 'BTC', 'SOL']
     if symbol not in allowed_symbols:
         raise Exception(f"Symbol {symbol} not in {allowed_symbols}")
-    
+
     interest_free_rates = {
-        'BTC':0.04/100,
-        'ETH':0.85/100,
-        'SOL':2.43/100 #2%
+        'BTC': 0.04 / 100,
+        'ETH': 0.85 / 100,
+        'SOL': 2.43 / 100  # 2%
     }
     return interest_free_rates.get(symbol)
+
 
 def euro_implied_vol(option_type, fs, x, t, r, q, cp):
     b = r - q
     return _gbs_implied_vol(option_type, fs, x, t, r, b, cp)
 
+
 def euro_implied_vol_76(option_type, fs, x, t, r, cp):
     b = 0
     return _gbs_implied_vol(option_type, fs, x, t, r, b, cp)
 
+
 def _gbs_implied_vol(option_type, fs, x, t, r, b, cp, precision=.00001, max_steps=100):
     return _newton_implied_vol(_gbs, option_type, x, fs, t, b, r, cp, precision, max_steps)
+
 
 # The primary class for calculating Generalized Black Scholes option prices and deltas
 # It is not intended to be part of this module's public interface
@@ -103,8 +111,9 @@ def _gbs(option_type, fs, x, t, r, b, v):
     _debug("     d1= {0}\n     d2 = {1}".format(d1, d2))
     _debug("     delta = {0}\n     gamma = {1}\n     theta = {2}\n     vega = {3}\n     rho={4}".format(delta, gamma,
                                                                                                         theta, vega,
-                                                                                                        rho))    
-    return value, delta, gamma, theta, vega, rho    
+                                                                                                        rho))
+    return value, delta, gamma, theta, vega, rho
+
 
 def _approx_implied_vol(option_type, fs, x, t, r, b, cp):
     _test_option_type(option_type)
@@ -125,6 +134,7 @@ def _approx_implied_vol(option_type, fs, x, t, r, b, cp):
     v = (a * (b + math.sqrt(b ** 2 + c))) / math.sqrt(t)
 
     return v
+
 
 def _newton_implied_vol(val_fn, option_type, x, fs, t, b, r, cp, precision=.00001, max_steps=100):
     # make sure a valid option type was entered
@@ -159,7 +169,6 @@ def _newton_implied_vol(val_fn, option_type, x, fs, t, b, r, cp, precision=.0000
         countr += 1
         _debug("     IVOL STEP {0}. v={1}".format(countr, v))
 
-    
     # check if function converged and return a value
     if abs(cp - value) < precision:
         # the search function converged
@@ -167,6 +176,7 @@ def _newton_implied_vol(val_fn, option_type, x, fs, t, b, r, cp, precision=.0000
     else:
         # if the search function didn't converge, try a bisection search
         return _bisection_implied_vol(val_fn, option_type, fs, x, t, r, b, cp, precision, max_steps)
+
 
 # ----------
 # Find the Implied Volatility using a Bisection search
@@ -190,7 +200,7 @@ def _bisection_implied_vol(val_fn, option_type, fs, x, t, r, b, cp, precision=.0
 
     # Estimate the high/low bounds on price
     cp_mid = val_fn(option_type, fs, x, t, r, b, v_mid)[0]
-    
+
     # initialize bisection loop
     current_step = 0
     diff = abs(cp - cp_mid)
@@ -228,14 +238,17 @@ def _bisection_implied_vol(val_fn, option_type, fs, x, t, r, b, cp, precision=.0
             "Implied Vol did not converge. Best Guess={0}, Price diff={1}, Required Precision={2}".format(v_mid, diff,
                                                                                                           precision))
 
+
 # This class defines the Exception that gets thrown when there is a calculation error
 class GBS_CalculationError(Exception):
     def __init__(self, mismatch):
         Exception.__init__(self, mismatch)
 
+
 class GBS_InputError(Exception):
     def __init__(self, mismatch):
         Exception.__init__(self, mismatch)
+
 
 class _GBS_Limits:
     # An GBS model will return an error if an out-of-bound input is input
@@ -270,10 +283,12 @@ class _GBS_Limits:
     MAX_b = 1
     MAX_r = 1
     MAX_V = 5
-      
+
+
 def _test_option_type(option_type):
     if (option_type != "c") and (option_type != "p"):
         raise GBS_InputError("Invalid Input option_type ({0}). Acceptable value are: c, p".format(option_type))
+
 
 def _gbs_test_inputs(option_type, fs, x, t, r, b, v):
     # -----------

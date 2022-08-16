@@ -15,3 +15,14 @@ CREATE TABLE prod_serum_option (
     price_status FLOAT,
     current_datetime TIMESTAMP NOT NULL
 );
+
+CREATE TABLE implied_volatility (
+    current_datetime TIMESTAMP NOT NULL,
+    exchange VARCHAR(250),
+    implied_volatility NUMBER,
+    delta NUMBER
+    gamma NUMBER
+    theta NUMBER
+    vega NUMBER
+    rho NUMBER
+);
