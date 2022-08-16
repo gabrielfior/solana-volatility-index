@@ -1,8 +1,10 @@
 from calc import VolatilityHandler
 from db import DB
 
+def a():
+    print ('oi')
 
-if __name__ == "__main__":
+def execute():
     v = VolatilityHandler()
     database = DB()
     grouped = database.retrieve_options_data()
