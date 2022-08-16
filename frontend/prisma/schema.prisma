@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model implied_volatility {
+  index              BigInt    @id
+  current_datetime   DateTime? @db.Timestamp(6)
+  exchange           String?
+  implied_volatility Float?
+  delta              String?
+  gamma              String?
+  theta              String?
+  vega               String?
+  rho                String?
+
+  @@index([index], map: "ix_implied_volatility_index")
+}
+
+model prod_serum_option {
+  id                   Int       @id @default(autoincrement())
+  serum_market_address String?   @db.VarChar(250)
+  exchange             String?   @db.VarChar(250)
+  interest_rate        Float?
+  live                 Boolean?
+  strike               Float?
+  expiry_date          DateTime? @db.Timestamp(6)
+  kind                 String?   @db.VarChar(250)
+  mark_price           Float?
+  delta                String?   @db.VarChar(100)
+  implied_volatility   String?   @db.VarChar(100)
+  vega                 Float?
+  price                Float?
+  confidence           Float?
+  price_status         Float?
+  current_datetime     DateTime  @db.Timestamp(6)
+}
