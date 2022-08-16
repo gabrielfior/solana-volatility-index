@@ -36,7 +36,7 @@ export type Option = {
 
 
 export async function uploadToDb(items: Array<Option>) {
-  console.log('enter uploadToS3');
+  console.log('uploading items');
 
   //var AWS = require('aws-sdk');
   AWS.config.update({ region: `${process.env.S3_REGION}` });

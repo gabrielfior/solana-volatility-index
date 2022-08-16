@@ -32,11 +32,11 @@ export async function writeItemToDb(db: any, item: Option) {
     current_datetime) VALUES($1, $2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
         Object.values(item)
     )
-        .then(data => {
-            console.log(data); // print new user id;
+        .then(() => {
+            //console.log('finished writing');
         })
         .catch(error => {
-            console.log('ERROR:', error); // print error;
+            console.log('ERROR:', error);
         });
 }
 

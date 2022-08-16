@@ -1,10 +1,11 @@
 CREATE TABLE prod_serum_option (
+    id serial PRIMARY KEY,
     serum_market_address VARCHAR(250),
     exchange VARCHAR(250),
     interest_rate FLOAT,
     live BOOLEAN,
     strike FLOAT,
-    expiry_date DATE,
+    expiry_date TIMESTAMP,
     kind VARCHAR(250),
     mark_price FLOAT,
     delta VARCHAR(100),
@@ -17,12 +18,13 @@ CREATE TABLE prod_serum_option (
 );
 
 CREATE TABLE implied_volatility (
+    index INTEGER PRIMARY KEY NOT NULL,
     current_datetime TIMESTAMP NOT NULL,
     exchange VARCHAR(250),
-    implied_volatility NUMBER,
-    delta NUMBER
-    gamma NUMBER
-    theta NUMBER
-    vega NUMBER
-    rho NUMBER
+    implied_volatility FLOAT,
+    delta FLOAT,
+    gamma FLOAT,
+    theta FLOAT,
+    vega FLOAT,
+    rho FLOAT
 );
