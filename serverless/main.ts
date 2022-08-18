@@ -152,7 +152,7 @@ const initializeExchange = async (connection: Connection) => {
 };
 
 export async function main() {
-  let networkUrlDevNet = `https://aged-compatible-wish.solana-devnet.quiknode.pro/${process.env.QUICKNODE_KEY}/`;
+  let networkUrlDevNet = `https://shy-empty-needle.solana-devnet.discover.quiknode.pro/${process.env.QUICKNODE_KEY}/`;
   const connection = new Connection(networkUrlDevNet, utils.defaultCommitment());
 
   await initializeExchange(connection);
