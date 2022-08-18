@@ -140,19 +140,19 @@ const initializeExchange = async (connection: Connection) => {
   let DEVNET_PROGRAM_ID = 'BG3oRikW8d16YjUEmX3ZxHm9SiJzrGtMhsSR8aCw1Cd7';
 
   await Exchange.load(
-    [assets.Asset.SOL, assets.Asset.BTC, assets.Asset.ETH], // Can be one or more depending on what you wish to trade
+    [assets.Asset.SOL], // Can be one or more depending on what you wish to trade
     new PublicKey(DEVNET_PROGRAM_ID),
     Network.DEVNET,
     connection,
     utils.defaultCommitment(),
     undefined, // Exchange wallet can be ignored for normal clients.
-    500, // ThrottleMs - increase if you are running into rate limit issues on startup.
+    2000, // ThrottleMs - increase if you are running into rate limit issues on startup.
     undefined // Callback - See below for more details.
   );
 };
 
 export async function main() {
-  let networkUrlDevNet = `https://shy-empty-needle.solana-devnet.discover.quiknode.pro/${process.env.QUICKNODE_KEY}/`;
+  let networkUrlDevNet = `https://quick-young-flower.solana-devnet.discover.quiknode.pro/${process.env.QUICKNODE_KEY}/`;
   const connection = new Connection(networkUrlDevNet, utils.defaultCommitment());
 
   await initializeExchange(connection);
