@@ -1,6 +1,6 @@
 from calc import VolatilityHandler
 from db import DB
-from loguru import logger
+#from loguru import logger
 
 def execute():
     v = VolatilityHandler()
@@ -12,6 +12,6 @@ def execute():
         date_to_implied_vol_for_exchange[datetime_idx] = implied_vol
 
     database.store_implied_vol(date_to_implied_vol_for_exchange)
-    logger.info('closing connection')
+#    logger.info('closing connection')
     database.engine.dispose()
-    logger.info('done')
+#    logger.info('done')

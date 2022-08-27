@@ -1,4 +1,4 @@
-import loguru
+#import loguru
 import numpy as np
 import pandas as pd
 from utils import *
@@ -17,7 +17,7 @@ class VolatilityHandler:
                 except KindException as e:
                     continue
                 except Exception as e:
-                    loguru.logger.exception(e)
+#                    loguru.logger.exception(e)
                     continue
             # take mean
             mean_implied_vol = np.mean(values)

@@ -2,7 +2,7 @@
 import datetime
 import math
 
-import loguru
+#import loguru
 from scipy.stats import norm
 
 from exceptions import KindException
@@ -76,7 +76,7 @@ def _gbs_implied_vol(option_type, fs, x, t, r, b, cp, precision=.00001, max_step
 #         b = cost of carry, v = implied volatility
 # Outputs: value, delta, gamma, theta, vega, rho
 def _gbs(option_type, fs, x, t, r, b, v):
-    loguru.logger.debug("Debugging Information: _gbs()")
+#    loguru.logger.debug("Debugging Information: _gbs()")
     # -----------
     # Test Inputs (throwing an exception on failure)
     _gbs_test_inputs(option_type, fs, x, t, r, b, v)
@@ -89,7 +89,7 @@ def _gbs(option_type, fs, x, t, r, b, v):
 
     if option_type == "c":
         # it's a call
-        loguru.logger.debug("     Call Option")
+#        loguru.logger.debug("     Call Option")
         value = fs * math.exp((b - r) * t) * norm.cdf(d1) - x * math.exp(-r * t) * norm.cdf(d2)
         delta = math.exp((b - r) * t) * norm.cdf(d1)
         gamma = math.exp((b - r) * t) * norm.pdf(d1) / (fs * v * t__sqrt)
@@ -99,7 +99,7 @@ def _gbs(option_type, fs, x, t, r, b, v):
         rho = x * t * math.exp(-r * t) * norm.cdf(d2)
     else:
         # it's a put
-        loguru.logger.debug("     Put Option")
+#        loguru.logger.debug("     Put Option")
         value = x * math.exp(-r * t) * norm.cdf(-d2) - (fs * math.exp((b - r) * t) * norm.cdf(-d1))
         delta = -math.exp((b - r) * t) * norm.cdf(-d1)
         gamma = math.exp((b - r) * t) * norm.pdf(d1) / (fs * v * t__sqrt)
@@ -108,11 +108,11 @@ def _gbs(option_type, fs, x, t, r, b, v):
         vega = math.exp((b - r) * t) * fs * t__sqrt * norm.pdf(d1)
         rho = -x * t * math.exp(-r * t) * norm.cdf(-d2)
 
-    loguru.logger.debug("     d1= {0}\n     d2 = {1}".format(d1, d2))
-    loguru.logger.debug(
-        "     delta = {0}\n     gamma = {1}\n     theta = {2}\n     vega = {3}\n     rho={4}".format(delta, gamma,
-                                                                                                     theta, vega,
-                                                                                                     rho))
+#    loguru.logger.debug("     d1= {0}\n     d2 = {1}".format(d1, d2))
+#    loguru.logger.debug(
+#        "     delta = {0}\n     gamma = {1}\n     theta = {2}\n     vega = {3}\n     rho={4}".format(delta, gamma,
+#                                                                                                     theta, vega,
+#                                                                                                     rho))
     return value, delta, gamma, theta, vega, rho
 
 
@@ -150,9 +150,9 @@ def _newton_implied_vol(val_fn, option_type, x, fs, t, b, r, cp, precision=.0000
     value, delta, gamma, theta, vega, rho = val_fn(option_type, fs, x, t, r, b, v)
     min_diff = abs(cp - value)
 
-    loguru.logger.debug("-----")
-    loguru.logger.debug("Debug info for: _Newton_ImpliedVol()")
-    loguru.logger.debug("    Vinitial={0}".format(v))
+#    loguru.logger.debug("-----")
+#    loguru.logger.debug("Debug info for: _Newton_ImpliedVol()")
+#    loguru.logger.debug("    Vinitial={0}".format(v))
 
     # Newton-Raphson Search
     countr = 0
@@ -160,7 +160,7 @@ def _newton_implied_vol(val_fn, option_type, x, fs, t, b, r, cp, precision=.0000
 
         v = v - (value - cp) / vega
         if (v > _GBS_Limits.MAX_V) or (v < _GBS_Limits.MIN_V):
-            loguru.logger.debug("    Volatility out of bounds")
+#            loguru.logger.debug("    Volatility out of bounds")
             break
 
         value, delta, gamma, theta, vega, rho = val_fn(option_type, fs, x, t, r, b, v)
@@ -168,7 +168,7 @@ def _newton_implied_vol(val_fn, option_type, x, fs, t, b, r, cp, precision=.0000
 
         # keep track of how many loops
         countr += 1
-        loguru.logger.debug("     IVOL STEP {0}. v={1}".format(countr, v))
+#        loguru.logger.debug("     IVOL STEP {0}. v={1}".format(countr, v))
 
     # check if function converged and return a value
     if abs(cp - value) < precision:
@@ -183,8 +183,8 @@ def _newton_implied_vol(val_fn, option_type, x, fs, t, b, r, cp, precision=.0000
 # Find the Implied Volatility using a Bisection search
 def _bisection_implied_vol(val_fn, option_type, fs, x, t, r, b, cp, precision=.00001, max_steps=100):
     # v, delta,gamma, theta, vega, rho
-    loguru.logger.debug("-----")
-    loguru.logger.debug("Debug info for: _bisection_implied_vol()")
+#    loguru.logger.debug("-----")
+#    loguru.logger.debug("Debug info for: _bisection_implied_vol()")
 
     # Estimate Upper and Lower bounds on volatility
     # Assume American Implied vol is within +/- 50% of the GBS Implied Vol
@@ -207,8 +207,8 @@ def _bisection_implied_vol(val_fn, option_type, fs, x, t, r, b, cp, precision=.0
     current_step = 0
     diff = abs(cp - cp_mid)
 
-    loguru.logger.debug("     American IVOL starting conditions: CP={0} cp_mid={1}".format(cp, cp_mid))
-    loguru.logger.debug("     IVOL {0}. V[{1},{2},{3}]".format(current_step, v_low, v_mid, v_high))
+#    loguru.logger.debug("     American IVOL starting conditions: CP={0} cp_mid={1}".format(cp, cp_mid))
+#    loguru.logger.debug("     IVOL {0}. V[{1},{2},{3}]".format(current_step, v_low, v_mid, v_high))
 
     # Keep bisection volatility until correct price is found
     while (diff > precision) and (current_step < max_steps):
@@ -230,7 +230,7 @@ def _bisection_implied_vol(val_fn, option_type, fs, x, t, r, b, cp, precision=.0
         cp_mid = val_fn(option_type, fs, x, t, r, b, v_mid)[0]
         diff = abs(cp - cp_mid)
 
-        loguru.logger.debug("     IVOL {0}. V[{1},{2},{3}]".format(current_step, v_low, v_mid, v_high))
+#        loguru.logger.debug("     IVOL {0}. V[{1},{2},{3}]".format(current_step, v_low, v_mid, v_high))
 
     # return output
     if abs(cp - cp_mid) < precision:
@@ -323,8 +323,8 @@ def _gbs_test_inputs(option_type, fs, x, t, r, b, v):
         raise GBS_InputError(
             "Invalid Input Risk Free Rate (r = {0}). Acceptable range for inputs is {1} to {2}".format(r,
                                                                                                        _GBS_Limits.MIN_r,
-                                                                                                       _GBS_Limits.MAX_r))
 
+                                                                                                       _GBS_Limits.MAX_r))
     if (v < _GBS_Limits.MIN_V) or (v > _GBS_Limits.MAX_V):
         raise GBS_InputError(
             "Invalid Input Implied Volatility (V = {0}). \
